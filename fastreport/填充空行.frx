@@ -1,0 +1,128 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Report ScriptLanguage="CSharp" DoublePass="true" ReportInfo.Created="11/18/2011 13:59:10" ReportInfo.Modified="10/16/2018 09:56:47" ReportInfo.CreatorVersion="1.7.36.0">
+  <ScriptText>using System;
+using System.Collections;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Windows.Forms;
+using System.Drawing;
+using System.Data;
+using FastReport;
+using FastReport.Data;
+using FastReport.Dialog;
+using FastReport.Barcode;
+using FastReport.Table;
+using FastReport.Utils;
+
+namespace FastReport
+{
+  public class ReportScript
+     {  /*
+      int CurRowQty=1;
+      private void GroupHeader1_BeforePrint(object sender, EventArgs e)
+      {
+        //设置已经打印的行数为1
+        CurRowQty=1;      
+      }
+
+      private void Data1_AfterPrint(object sender, EventArgs e)
+      {
+        //记录已经打印的行数。
+        CurRowQty=CurRowQty+1;
+      }
+
+      private void DataFooter1_BeforePrint(object sender, EventArgs e)
+      {
+        //计算出数据脚的高度。
+        DataFooter1.Height=(21-CurRowQty)*txtNumber.Height;
+      } */
+    }
+  }</ScriptText>
+  <Dictionary>
+    <TableDataSource Name="MP_GATDBA" ReferenceName="Data.MP_GATDBA" DataType="System.Int32" Enabled="true"/>
+    <TableDataSource Name="MP_GATDBB" ReferenceName="Data.MP_GATDBB" DataType="System.Int32" Enabled="true"/>
+    <Relation Name="MP_GATDBA_MP_GATDBB" ParentDataSource="MP_GATDBA" ChildDataSource="MP_GATDBB" ParentColumns="TFA001&#13;&#10;TFA002&#13;&#10;TFA003&#13;&#10;TFA004&#13;&#10;TFA015&#13;&#10;TFA027" ChildColumns="TFB001&#13;&#10;TFB002&#13;&#10;TFB003&#13;&#10;TFB004&#13;&#10;TFB020&#13;&#10;TFB019" Enabled="true"/>
+    <Total Name="总值合计" Expression="[MP_GATDBB.JINE]" Evaluator="Data2" PrintOn="GroupFooter1"/>
+    <Total Name="净重合计" Expression="[MP_GATDBB.TFB012]" Evaluator="Data2" PrintOn="GroupFooter1"/>
+  </Dictionary>
+  <ReportPage Name="Page1" RawPaperSize="9" LeftMargin="5" TopMargin="5" RightMargin="5" BottomMargin="5" FirstPageSource="15" OtherPagesSource="15" Guides="0,264.6,718.2,85.05,510.3,595.35,75.6,330.75,321.3,415.8,529.2,604.8,585.9,680.4,179.55,66.15,37.8,132.3,189,255.15,245.7,368.55,434.7,491.4,113.3,387.35,38.35,113.4,500.75,453.5,623.6,557.45,680.3,623.7,576.45,670.95,687.4,753.55,387.45,452.6,500.85,499.85,557.55,556.55,727.65,170.1,396.9" Fill.Color="White">
+    <GroupHeaderBand Name="GroupHeader1" Width="756" BeforePrintEvent="GroupHeader1_BeforePrint" StartNewPage="true" RepeatOnEveryPage="true" Condition="[MP_GATDBA.TFA001]+[MP_GATDBA.TFA002]+[MP_GATDBA.TFA003]+[MP_GATDBA.TFA004]+Length([MP_GATDBA.TFA015])+[MP_GATDBA.TFA015]+[MP_GATDBA.TFA027]">
+      <DataBand Name="Data1" Top="214.8" Width="756" DataSource="MP_GATDBA" KeepTogether="true">
+        <DataHeaderBand Name="DataHeader1" Top="4" Width="756" Height="206.8" Fill.Color="White" Guides="28.35,47.25,0,66.15,94.5,113.4,122.85,141.75,151.2,170.1,179.55,236.25,198.45,18.9,85.05,37.8" RepeatOnEveryPage="true">
+          <TextObject Name="Text1" Top="28.35" Width="264.6" Height="18.9" Text="商       号：技研新阳有限公司" VertAlign="Center" Font="宋体, 9pt, style=Bold"/>
+          <TextObject Name="Text2" Width="718.2" Height="28.35" Text="进口货物装箱单" HorzAlign="Center" VertAlign="Center" Font="宋体, 14pt, style=Bold"/>
+          <TextObject Name="Text3" Top="47.25" Width="85.05" Height="18.9" Text="接货单位：" VertAlign="Center" Font="宋体, 9pt, style=Bold"/>
+          <TextObject Name="Text4" Left="510.3" Top="47.25" Width="85.05" Height="18.9" Text="手册编号：" VertAlign="Center" Font="宋体, 9pt, style=Bold"/>
+          <TextObject Name="Text5" Top="77.5" Width="75.6" Height="18.9" Text="协议(合同)号" VertAlign="Center" Font="Arial, 8pt, style=Bold"/>
+          <TextObject Name="Text6" Left="264.6" Top="77.5" Width="66.15" Height="18.9" Text="运输单位" VertAlign="Center" Font="Arial, 8pt, style=Bold"/>
+          <TextObject Name="Text7" Left="321.3" Top="77.5" Width="94.5" Height="18.9" Border.Lines="Bottom" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          <TextObject Name="Text8" Left="481.95" Top="77.5" Width="75.6" Height="18.9" Text="国内车牌" VertAlign="Center" Font="Arial, 8pt, style=Bold"/>
+          <TextObject Name="Text9" Left="538.65" Top="77.5" Width="94.5" Height="18.9" Border.Lines="Bottom" Text="[MP_GATDBA.CarNo]" VertAlign="Center" Font="Arial, 8pt, style=Bold"/>
+          <TextObject Name="Text10" Top="105.85" Width="75.6" Height="18.9" Text="起动国(地区)" VertAlign="Center" Font="Arial, 8pt, style=Bold"/>
+          <TextObject Name="Text11" Left="75.6" Top="77.5" Width="170.1" Height="18.9" Border.Lines="Bottom" Text="[IIf([MP_GATDBA.DBA012]==1,[MP_GATDBA.TFA004]+'-'+[MP_GATDBA.TFA013],[MP_GATDBA.TFA004])]" VertAlign="Center" Font="Arial, 8pt, style=Bold"/>
+          <TextObject Name="Text12" Left="75.6" Top="105.85" Width="103.95" Height="18.9" Border.Lines="Bottom" Text="中国香港" VertAlign="Bottom" Font="Arial, 8pt, style=Bold"/>
+          <TextObject Name="Text13" Left="66.15" Top="47.25" Width="198.45" Height="18.9" Border.Lines="Bottom" Text="[MP_GATDBA.MIA016]" VertAlign="Center" Font="宋体, 9pt, style=Bold"/>
+          <TextObject Name="Text14" Top="134.2" Width="37.8" Height="18.9" Text="件数" VertAlign="Center" Font="Arial, 8pt, style=Bold"/>
+          <TextObject Name="Text15" Left="37.8" Top="134.2" Width="94.5" Height="18.9" Border.Lines="Bottom" Text="[MP_GATDBA.XS]" VertAlign="Bottom" Font="Arial, 8pt, style=Bold"/>
+          <TextObject Name="Text17" Left="189" Top="134.2" Width="66.15" Height="18.9" Text="包装种类" VertAlign="Center" Font="Arial, 8pt, style=Bold"/>
+          <TextObject Name="Text16" Left="245.7" Top="134.2" Width="75.6" Height="18.9" Border.Lines="Bottom" Text="[MP_GATDBA.TFA017]" VertAlign="Bottom" Font="Arial, 8pt, style=Bold"/>
+          <TextObject Name="Text18" Left="368.55" Top="134.2" Width="66.15" Height="18.9" Text="毛重(公斤)" VertAlign="Center" Font="Arial, 8pt, style=Bold"/>
+          <TextObject Name="Text19" Left="434.7" Top="134.2" Width="56.7" Height="18.9" Border.Lines="Bottom" Text="[Ceiling([MP_GATDBA.MZ])]" VertAlign="Bottom" Font="Arial, 8pt, style=Bold"/>
+          <TextObject Name="Text20" Left="529.2" Top="134.2" Width="66.15" Height="18.9" Text="净重(公斤)" VertAlign="Center" Font="Arial, 8pt, style=Bold"/>
+          <TextObject Name="Text23" Top="159.55" Width="37.8" Height="47.25" Border.Lines="All" Text="项&#13;&#10;号" HorzAlign="Center" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text24" Left="113.3" Top="159.55" Width="302.5" Height="47.25" Border.Lines="All" Text="货名规格及货号" HorzAlign="Center" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text25" Left="38.35" Top="159.55" Width="75.05" Height="47.25" Border.Lines="All" Text="海关统计                   商品编号" HorzAlign="Center" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text26" Left="415.9" Top="159.55" Width="84.85" Height="18.9" Border.Lines="Right, Top, Bottom" Text="数     量" HorzAlign="Center" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text27" Left="415.7" Top="178.45" Width="47.25" Height="28.35" Border.Lines="All" Text="数   量" HorzAlign="Center" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text28" Left="461.92" Top="178.45" Width="37.6" Height="28.35" Border.Lines="Top, Bottom" Text="单位" HorzAlign="Center" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text29" Left="500.75" Top="159.55" Width="151.2" Height="18.9" Border.Lines="All" Text="成交价格" HorzAlign="Center" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text30" Left="500.75" Top="178.45" Width="75.6" Height="28.35" Border.Lines="All" Text="单  价  ([MP_GATDBA.DBA025])" HorzAlign="Center" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text31" Left="576.35" Top="178.45" Width="75.6" Height="28.35" Border.Lines="All" Text="总  值  ([MP_GATDBA.DBA025])" HorzAlign="Center" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text32" Left="651.95" Top="159.55" Width="56.7" Height="47.25" Border.Lines="All" Text="原产国别(地区)" HorzAlign="Center" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text48" Left="623.7" Width="94.5" Height="18.9" Text="[MP_GATDBA.TFA015]" VertAlign="Center" Font="宋体, 9pt, style=Bold"/>
+          <TextObject Name="Text47" Left="576.45" Top="47.25" Width="103.95" Height="18.9" Border.Lines="Bottom" Text="[MP_GATDBA.MIA002]" VertAlign="Center" Font="宋体, 9pt, style=Bold"/>
+          <TextObject Name="Text36" Left="595.35" Top="134.2" Width="75.6" Height="18.9" Border.Lines="Bottom" Text="[Ceiling([MP_GATDBA.JZ])]" VertAlign="Bottom" WordWrap="false" Font="Arial, 8pt, style=Bold" Trimming="EllipsisCharacter"/>
+          <TextObject Name="Text22" Top="75.15" Width="708.75" Height="85.05" Border.Lines="All" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text67" Left="529.2" Top="18.9" Width="94.5" Height="18.9" Text="[MP_GATDBA.DBA010]" VertAlign="Center" Font="宋体, 9pt, style=Bold"/>
+        </DataHeaderBand>
+        <DataBand Name="Data2" Top="218.8" Width="756" Height="39.8" Fill.Color="White" CanGrow="true" AfterPrintEvent="Data1_AfterPrint" Guides="0,37.8,9.45,28.35,32.13,9.45" DataSource="MP_GATDBB" KeepDetail="true">
+          <TextObject Name="txtNumber" Width="37.8" Height="39.8" Border.Lines="All" CanGrow="true" GrowToBottom="true" Text="[IIf([MP_GATDBA.DBA012]==1,[MP_GATDBB.TFB005],[MP_GATDBB.TFB018])]" HorzAlign="Center" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text34" Left="38.35" Width="75.05" Height="39.8" Border.Lines="All" CanGrow="true" GrowToBottom="true" Text="[MP_GATDBB.MBA004]" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text35" Left="113.3" Width="302.5" Height="39.8" Border.Lines="All" CanGrow="true" GrowToBottom="true" Text="[MP_GATDBB.MBA006]" VertAlign="Center" Font="宋体, 7pt, style=Bold"/>
+          <TextObject Name="Text21" Left="415.7" Width="46.25" Height="39.8" Border.Lines="Left, Top, Bottom" CanGrow="true" GrowToBottom="true" Text="[ToDouble([MP_GATDBB.TFB010])]" HorzAlign="Right" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text58" Left="462.05" Width="38.8" Height="39.8" Border.Lines="Left, Top, Bottom" CanGrow="true" GrowToBottom="true" Text="[MP_GATDBB.MBA010]" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text61" Left="652.05" Width="56.7" Height="39.8" Border.Lines="All" CanGrow="true" GrowToBottom="true" Text="[MP_GATDBB.TFB016]" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text66" Left="708.75" Width="47.25" Height="32.13" CanGrow="true" GrowToBottom="true" Text="[ToDouble([MP_GATDBB.TFB012])]" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text111" Left="500.75" Width="75.6" Height="39.8" Border.Lines="All" CanGrow="true" GrowToBottom="true" Text="[MP_GATDBB.MBA011]" HorzAlign="Center" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <TextObject Name="Text112" Left="576.35" Width="75.6" Height="39.8" Border.Lines="All" CanGrow="true" GrowToBottom="true" Text="[MP_GATDBB.JINE]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" HorzAlign="Center" VertAlign="Center" Font="宋体, 8pt, style=Bold"/>
+          <Sort>
+            <Sort Expression="[MP_GATDBB.TFB005]"/>
+          </Sort>
+        </DataBand>
+        <DataFooterBand Name="DataFooter1" Top="304.4" Width="756" Fill.Color="White" BeforePrintEvent="DataFooter1_BeforePrint" KeepWithData="true">
+          <ChildBand Name="Child1" Top="262.6" Width="756" Height="37.8" Guides="0,37.8" FillUnusedSpace="true">
+            <TextObject Name="Text77" Width="37.8" Height="37.8" Border.Lines="All" GrowToBottom="true" VertAlign="Bottom" Font="Arial, 9pt, style=Bold"/>
+            <TextObject Name="Text78" Left="38.35" Width="74.95" Height="37.8" Border.Lines="All" GrowToBottom="true" VertAlign="Bottom" Font="Arial, 9pt, style=Bold"/>
+            <TextObject Name="Text79" Left="113.3" Width="302.4" Height="37.8" Border.Lines="All" GrowToBottom="true" VertAlign="Bottom" Font="Arial, 9pt, style=Bold"/>
+            <TextObject Name="Text101" Left="576.45" Width="75.6" Height="37.8" Border.Lines="Right, Top, Bottom" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+            <TextObject Name="Text106" Left="500.75" Width="75.6" Height="37.8" Border.Lines="All" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+            <TextObject Name="Text108" Left="415.8" Width="46.25" Height="37.8" Border.Lines="Left, Top, Bottom" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+            <TextObject Name="Text109" Left="462.05" Width="38.8" Height="37.8" Border.Lines="Left, Top, Bottom" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+            <TextObject Name="Text110" Left="652.05" Width="56.7" Height="37.8" Border.Lines="Right, Top, Bottom" HorzAlign="Center" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+          </ChildBand>
+        </DataFooterBand>
+      </DataBand>
+      <GroupFooterBand Name="GroupFooter1" Top="308.4" Width="756" Height="62.15" Fill.Color="White" Guides="23.9,42.8,43.25,62.15,24.9,43.8,25.9,44.8,9.45,28.35" RepeatOnEveryPage="true">
+        <TextObject Name="Text41" Top="23.9" Width="66.15" Height="18.9" Text="申报日期" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        <TextObject Name="Text42" Left="66.15" Top="23.9" Width="103.95" Height="18.9" Text="[MP_GATDBA.DBA004]" Format="Date" Format.Format="D" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        <TextObject Name="Text43" Top="43.25" Width="170.1" Height="18.9" Text="报关单位及报关员(盖章)" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        <TextObject Name="Text44" Left="510.3" Top="24.9" Width="66.15" Height="18.9" Text="发货日期" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        <TextObject Name="Text45" Left="576.45" Top="25.9" Width="103.95" Height="18.9" Text="[MP_GATDBA.DBA004]" Format="Date" Format.Format="D" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        <TextObject Name="Text46" Left="510.3" Top="43.25" Width="170.1" Height="18.9" Text="发货厂商(盖章)" VertAlign="Center" Font="Arial, 9pt, style=Bold"/>
+        <TextObject Name="Text64" Left="529.1" Top="9.45" Width="47.25" Height="18.9" GrowToBottom="true" CanBreak="false" Text="合计：" Font="Arial, 8pt, style=Bold"/>
+        <TextObject Name="Text33" Left="576.45" Top="9.45" Width="94.5" Height="18.9" Text="[MP_GATDBA.Amount]" Format="Number" Format.UseLocale="false" Format.DecimalDigits="2" Format.DecimalSeparator="." Format.GroupSeparator="" Format.NegativePattern="1" Font="宋体, 9pt, style=Bold"/>
+        <TextObject Name="Text37" Width="708.75" Height="28.35" Border.Lines="Top" Text="[MP_GATDBA.TFA019]" VertAlign="Center" Font="宋体, 9pt"/>
+      </GroupFooterBand>
+    </GroupHeaderBand>
+  </ReportPage>
+</Report>
