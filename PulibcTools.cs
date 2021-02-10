@@ -92,6 +92,83 @@ namespace WS_PUR_TOOL
             }
             return dataSouce;
         }
+        
+        /// <summary>
+        /// 将DataTable追加到EXCEL页上
+        /// </summary>
+        /// <param name="FilePath">文件路径</param>
+        /// <param name="SheetName">页名</param>
+        /// <param name="dt">数据表</param>
+        /// <param name="Cover">根据数据表名称，是否覆盖EXCEL的页</param>
+        private void appendTable2Excel(String FilePath, String SheetName, DataTable dt, bool Cover)
+        {
+            if (!File.Exists(FilePath))
+                throw new Exception("EXCEL文件路径不存在！请检查此路径是否正确：" + FilePath);
+
+            Microsoft.Office.Interop.Excel.Application excel = null;
+            Microsoft.Office.Interop.Excel.Workbook wb = null;
+            try
+            {
+                excel = new Microsoft.Office.Interop.Excel.Application();
+                wb = excel.Workbooks.Open(FilePath);
+                excel.Visible = false;
+                //关闭提示框，关联到删除sheet、关闭EXCEL进程
+                excel.DisplayAlerts = false;
+                for (int i = 0, len = wb.Sheets.Count; i < len; i++)
+                {
+                    Microsoft.Office.Interop.Excel.Worksheet s = (Microsoft.Office.Interop.Excel.Worksheet)wb.Worksheets.get_Item(i+1);
+                    if (s.Name.Equals(SheetName) && Cover)
+                    {
+                        s.Delete();
+                        len--;
+                    }
+                    else if(s.Name.Equals(SheetName) && !Cover)
+                    {
+                        return;
+                    }
+                }
+
+                int maxIndex = wb.Sheets.Count;
+                Microsoft.Office.Interop.Excel.Worksheet lastSheet = (Microsoft.Office.Interop.Excel.Worksheet)wb.Worksheets.get_Item(maxIndex);
+                wb.Worksheets.Add(System.Reflection.Missing.Value, lastSheet, System.Reflection.Missing.Value, System.Reflection.Missing.Value);
+                Microsoft.Office.Interop.Excel.Worksheet newSheet = (Microsoft.Office.Interop.Excel.Worksheet)wb.Worksheets.get_Item(maxIndex+1);
+
+                newSheet.Name = SheetName;
+                
+                for(int i = 0, len = dt.Columns.Count; i < len; i++)
+                {
+                    
+                    Microsoft.Office.Interop.Excel.Range range = newSheet.Cells[1, i + 1];
+                    range.NumberFormatLocal = "@";
+                    newSheet.Cells[1, i + 1] = dt.Columns[i].ColumnName;
+                }
+
+                for (int i = 0, len = dt.Rows.Count; i < len; i++)
+                {
+                    for (int j = 0, len2 = dt.Columns.Count; j < len2; j++)
+                    {
+                        Microsoft.Office.Interop.Excel.Range range = newSheet.Cells[i + 2, j + 1];
+                        range.NumberFormatLocal = "@";
+                        newSheet.Cells[i + 2 , j + 1] = dt.Rows[i][j].ToString();
+                    }
+                }
+
+                
+                wb.Close(true, Type.Missing, Type.Missing);
+                excel.Quit();
+                
+            }
+            catch (Exception ex)
+            {
+                if(null!= wb)
+                    wb.Close(false, Type.Missing, Type.Missing);
+                if (null != excel)
+                    excel.Quit();
+                throw ex;
+            }
+            
+            
+        }
 
 
     }
